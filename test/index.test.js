@@ -1,5 +1,6 @@
 const tape = require('tape');
 const formValidator = require('../lib/index');
+const log = require('mk-log');
 
 tape('test validator', (t) => {
 
@@ -55,7 +56,7 @@ tape('test validator', (t) => {
 
   const errorA = formValidator(formA, validation);
 
-  console.log('errorA', errorA);
+  log.debug('errorA', errorA);
 
   t.ok(errorA.errors.firstName.message, 'error on first name');
   t.ok(errorA.errors.privacy.message, 'error on privacy');
@@ -127,6 +128,7 @@ tape('test validator', (t) => {
 
 });
 
+
 tape('test size', (t) => {
   
   const formA = { 
@@ -155,5 +157,85 @@ tape('test size', (t) => {
   t.notOk(errorB, 'no error on ZIP size');
 
   t.end();
+
+});
+
+tape('test minItems', (t) => {
+  
+  const formA = { 
+    phones: [],
+  };
+  
+  const formB = { 
+    phones: ['33333']
+  };
+
+  const validation = {
+    phones: {
+      label: 'Phone Numbers',
+      rules: [{
+        required: true,
+      }, {
+        minItems: 1 
+      } ],
+    }
+  };
+  
+  const errorA = formValidator(formA, validation);
+
+  log.debug(errorA);
+
+  t.ok(errorA.errors.phones, 'error on minItems length');
+
+  const errorB = formValidator(formB, validation);
+  t.notOk(errorB, 'success on minItems size');
+
+  t.end();
+
+});
+
+
+tape('test async validation', (t) => {
+
+  const form = {
+    name: 'test',
+    street: ''
+  };
+
+  const validation = {
+    street: {
+      label: 'Strasse',
+      rules: [{required: true}]
+    },
+    name: {
+      label: 'Name', 
+      rules: [
+        { 
+          execAsync(fieldName) {
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                const result = {};
+                result[fieldName] = { message: 'this is an error message' };
+                resolve(result);
+              }, 1000); 
+            });  
+          }
+        } 
+      ] 
+    }
+  };
+
+  formValidator(form, validation, (error) => {
+    
+    log.debug('error       ', error);
+    log.debug('error.errors', error.errors);
+
+    t.ok(error.errors.name, 'async errors on name');
+    t.end();
+
+    //process.exit(0);
+
+  });
+
 
 });

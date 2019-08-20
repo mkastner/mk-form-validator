@@ -1,3 +1,5 @@
-*.swp
+*.swn
 *.swo
+*.swp
+log
 node_modules
