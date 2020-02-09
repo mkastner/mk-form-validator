@@ -194,6 +194,55 @@ tape('test minItems', (t) => {
 
 });
 
+tape('test custom validation', (t) => {
+
+  const form = {
+    name: 'test',
+    publishingContract: 'multiple',
+    publishingHouses: ['one', '']
+  };
+  
+  function customValidate(fieldName, value, validationRule, label, validation, form) {
+    if (form.publishingContract === 'multiple') {
+      let countCompleted = 0; 
+      for (let i = 0, l = form.publishingHouses.length; i < l; i++) {
+        if (form.publishingHouses[i]) {
+          countCompleted += 1;
+        } 
+      }
+      if (countCompleted < 2) {
+        return {message: 'Mindestens zwei Redaktionen sind anzugeben'}; 
+      }
+    } else if (form.publishingContract === 'exclusive') {
+      return {message: 'Bitte Name der Redaktion angeben'}; 
+    }
+  }
+
+  const validation = {
+    name: {
+      label: 'Name',
+      rules: [{required: true}]
+    },
+    publisher: {
+      label: 'Publisher', 
+      rules: [
+        { 
+          execCustom: customValidate
+        }
+      ] 
+    }
+  };
+
+  const error = formValidator(form, validation);    
+  log.info('error       ', error);
+  log.info('error.errors', error.errors);
+  
+  t.ok(error.errors.publisher, 'async errors on publisher');
+  t.end();
+
+
+});
+
 
 tape('test async validation', (t) => {
 

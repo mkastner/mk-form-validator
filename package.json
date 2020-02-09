@@ -1,6 +1,6 @@
 {
   "name": "mk-form-validator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Javascript form Validation",
   "main": "lib/index.js",
   "license": "MIT",
@@ -8,11 +8,12 @@
     "test": "yarn test:index && yarn test:helpers && yarn test:utils",
     "test:index": "NODE_ENV=test node test/index.test.js",
     "test:helpers": "NODE_ENV=test node test/helpers.test.js",
-    "test:utils": "NODE_ENV=test node test/utils.test.js"
+    "test:utils": "NODE_ENV=test node test/utils.test.js",
+    "github": "git push origin master"
   },
   "devDependencies": {
     "tape": "^4.10.1",
     "vue": "^2.6.10",
-    "mk-log": "https://github.com/mkastner/mk-log.git#v0.0.7"
+    "mk-log": "https://github.com/mkastner/mk-log.git#v0.0.9"
   }
 }
