@@ -3,7 +3,6 @@ const formValidator = require('../lib/index');
 const log = require('mk-log');
 
 tape('test validator', (t) => {
-
   
   const validation = { 
     firstName: {
@@ -234,8 +233,8 @@ tape('test custom validation', (t) => {
   };
 
   const error = formValidator(form, validation);    
-  log.info('error       ', error);
-  log.info('error.errors', error.errors);
+  log.debug('error       ', error);
+  log.debug('error.errors', error.errors);
   
   t.ok(error.errors.publisher, 'async errors on publisher');
   t.end();
