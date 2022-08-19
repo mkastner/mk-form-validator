@@ -1,5 +1,6 @@
 *.swn
 *.swo
 *.swp
-log
+log/*
 node_modules
+yarn-error.log
