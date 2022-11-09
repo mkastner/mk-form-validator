@@ -1,6 +1,6 @@
 {
   "name": "mk-form-validator",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Javascript form Validation",
   "main": "lib/index.js",
   "license": "MIT",
